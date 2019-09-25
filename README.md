@@ -25,5 +25,7 @@ This is used to convert the Stats Canada shape files to WGS84, which is the form
 Some graphs made on tableau using the data:
 <https://public.tableau.com/views/HousingPricesinGreaterTorontoArea/Sheet2?:embed=y&:display_count=yes&:origin=viz_share_link>
 
+![](imgs/Average_District_Price.png)
+
 
 
