@@ -8,7 +8,7 @@ path=r'data'
 
 # List comprehension to get all file names and combine into pandas dataframe
 filepaths = [os.path.join(path,file) for file in os.listdir(path) if file.endswith("Realtor.csv")]
-combined_data = pd.concat([pd.read_csv(file,index_col=0) for file in filepaths])
+combined_data = pd.concat([pd.read_csv(file) for file in filepaths])
 
 #Drop duplicates
 combined_data.drop_duplicates(subset='MlsNumber',inplace=True)
