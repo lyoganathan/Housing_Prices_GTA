@@ -69,7 +69,7 @@ def scrape_realtor(city,latmax,longmax,latmin,longmin):
     num_pages = full_data["Paging"]["TotalPages"]
     # Empty pandas dataframe
     col_names = ["MlsNumber","PostalCode","Price","PropertyType","Address","Longitude","Latitude","BuildingType",
-                 "Bathrooms","Bedrooms","Size","RealEstateCompany"]
+                 "Bathrooms","Bedrooms","Stories","Size","RealEstateCompany"]
     n_rows = num_pages*12
     data_df = pd.DataFrame(columns=col_names, index=range(n_rows))
 
