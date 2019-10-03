@@ -27,5 +27,9 @@ Some graphs made on tableau using the data:
 
 ![](imgs/Average_District_Price.png)
 
+## Firebase Firestore Webpage
+
+<https://myapp-18b49.firebaseapp.com/>
+
 
 
