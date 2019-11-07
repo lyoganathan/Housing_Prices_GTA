@@ -20,6 +20,10 @@ This find's the electoral district of a house based on its latitude and longtitu
 
 This is used to convert the Stats Canada shape files to WGS84, which is the format of realtor coordinates. It also gets just the regions in Ontario.
 
+### info_from_col.py
+
+Uses regex to parse out more useful information from columns.
+
 ## Visualizations
 
 Some graphs made on tableau using the data:
