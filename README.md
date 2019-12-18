@@ -22,7 +22,7 @@ This is used to convert the Stats Canada shape files to WGS84, which is the form
 
 ### info_from_col.py
 
-Uses regex to parse out more useful information from columns.
+Uses regex to parse out more useful information from columns. However, not all houses get a house number. For example, Lot 92 wouldn't get one.
 
 ## Visualizations
 

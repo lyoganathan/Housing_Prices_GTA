@@ -1,0 +1,35 @@
+import scrape_realtor
+import join_data
+import find_region
+import info_from_col
+
+scrape_realtor.scrape_realtor('HamiltonEast','12','43.182935,-79.698982','data')
+scrape_realtor.scrape_realtor('HamiltonWest','13','43.269680,-79.911580','data')
+scrape_realtor.scrape_realtor('HamiltonSouth','12','43.178655,-80.052600','data')
+scrape_realtor.scrape_realtor('Brantford','11','43.178625,-80.583035','data')
+scrape_realtor.scrape_realtor('Cambridge','11','43.421220,-80.520550','data')
+scrape_realtor.scrape_realtor('Waterdown','12','43.360685,-79.990120','data')
+scrape_realtor.scrape_realtor('Milton','12','43.481128,-79.990120','data')
+scrape_realtor.scrape_realtor('Burlington','12','43.360900,-79.637533','data')
+scrape_realtor.scrape_realtor('Oakville','12','43.481100,-79.636500','data')
+scrape_realtor.scrape_realtor('MissisaugaEast', '13', '43.571212,-79.584143','data')
+scrape_realtor.scrape_realtor('MissisaugaWest','13','43.571212,-79.760783','data')
+scrape_realtor.scrape_realtor('Georgetown','12','43.602077,-79.990120','data')
+scrape_realtor.scrape_realtor('MissisaugaNorth', '12','43.661467,-79.642334','data')
+scrape_realtor.scrape_realtor('Brampton','12','43.781062,-79.666023','data')
+scrape_realtor.scrape_realtor('Toronto', '13', '43.658907,-79.387145','data')
+scrape_realtor.scrape_realtor('York', '13', '43.718613,-79.387145','data')
+scrape_realtor.scrape_realtor('NorthYork', '13', '43.778507,-79.402251','data')
+scrape_realtor.scrape_realtor('Vaughn', '12', '43.844237,-79.666023','data')
+scrape_realtor.scrape_realtor('MarkhamWest', '13', '43.838341,-79.402251','data')
+scrape_realtor.scrape_realtor('KingCity', '12', '43.962973,-79.666023','data')
+scrape_realtor.scrape_realtor('RichmondHill', '13', '43.897745,-79.402251','data')
+scrape_realtor.scrape_realtor('Aurora', '12', '43.962973,-79.303817','data')
+scrape_realtor.scrape_realtor('Newmarket', '12', '44.065686,-79.460372','data')
+scrape_realtor.scrape_realtor('Scarborough', '11', '43.704964,-78.985457','data')
+scrape_realtor.scrape_realtor('MarkhamEast', '12', '43.879187,-79.150252','data')
+scrape_realtor.scrape_realtor('Oshawa', '12', '43.906155,-78.798003','data')
+
+join_data.join_data(r'data')
+find_region.find_region(r"data\all_houses.csv",r"data\fed_ont_WGS84.shp")
+info_from_col.new_cols(r"data\all_houses.csv")
