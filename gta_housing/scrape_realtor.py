@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import os
 
 #Scrape realtor.ca for house prices
 #https://stackoverflow.com/questions/53140904/cloning-api-call-from-an-existing-website-in-postman
@@ -13,7 +14,23 @@ def get_from_dict(dataDict, mapList):
     for k in mapList: dataDict = dataDict[k]
     return dataDict
 
-def scrape_realtor(city,latmax,longmax,latmin,longmin):
+def get_minmax_latlong(zoom,center):
+    # Trying to get latitude max/min and longitude max/min just using zoom and center
+    # Fit an exponential decay curve to how latitude/longitude vary with zoom (a * 0.5 **zoom + b)
+    # Got parameters with curve_fit from scipy.optimize
+    zoom = int(zoom)
+    lat_len = 497.617 * 0.5**zoom - 0.00013
+    long_len = 1448.433 * 0.5**zoom + 0.000005
+    center_lat, center_long = [float(x) for x in center.split(',')]
+    # Find min and max and save as five decimal point string
+    latmin = "{0:.5f}".format(center_lat - lat_len/2)
+    latmax = "{0:.5f}".format(center_lat + lat_len/2)
+    longmin = "{0:.5f}".format(center_long - long_len/2)
+    longmax = "{0:.5f}".format(center_long + long_len/2)
+    return latmax, longmax, latmin, longmin
+
+
+def scrape_realtor(city,zoom,center,path):
 
     headers = {
         'Origin': 'https://www.realtor.ca',
@@ -28,11 +45,12 @@ def scrape_realtor(city,latmax,longmax,latmin,longmin):
 
     # Can find longitude latitude info by searching realtor then copying from url
     # Max is 600 results (50x12), gotta move the screen and zoom to make sure only 600 results
-    # Markham: LatitudeMax=43.94939&LongitudeMax=-79.10857&LatitudeMin=43.82938&LongitudeMin=-79.46219
     # 12 is max per page, so gonna have to loop and send some requests
 
+    latmax, longmax, latmin, longmin = get_minmax_latlong(zoom,center)
+
     data = {
-        'ZoomLevel': '12',
+        'ZoomLevel': zoom,
         'LatitudeMax': latmax,
         'LongitudeMax': longmax,
         'LatitudeMin': latmin,
@@ -54,6 +72,7 @@ def scrape_realtor(city,latmax,longmax,latmin,longmin):
     }
 
     # Optional: use tor. Need Tor expert bundle and start tor.exe for this to work - requires install of requests[socks]
+    # into environment
     proxies = {
         'http': 'socks5://127.0.0.1:9050',
         'https': 'socks5://127.0.0.1:9050'
@@ -101,30 +120,38 @@ def scrape_realtor(city,latmax,longmax,latmin,longmin):
 
             house_idx += 1
 
-    data_df.to_csv("{}_Realtor.csv".format(city),index=False)
+    data_df.to_csv(os.path.join(path,'{}_Realtor.csv'.format(city)),index=False)
     errors_df = pd.DataFrame(errors)
-    errors_df.to_csv("{}_Realtor_errors.csv".format(city),index=False)
+    errors_df.to_csv(os.path.join(path,'{}_Realtor_errors.csv'.format(city)),index=False)
 
 
 if __name__ == '__main__':
-    scrape_realtor('Newmarket','44.08096','-79.37338','44.02113','-79.55019')
-    scrape_realtor('Aurora','44.03539','-79.26343','43.91557','-79.61705')
-    scrape_realtor('Richmondhill','43.93192','-79.33885','43.87193','-79.51566')
-    scrape_realtor('Markham','43.94939','-79.10857','43.82938','-79.46219')
-    scrape_realtor('Scarborough','43.83790','-79.11305','43.71768','-79.46668')
-    scrape_realtor('Vaughn','43.87710','-79.36083','43.75696','-79.71445')
-    scrape_realtor('Mississauga_1','43.56214','-79.58170','43.50178','79.75851')
-    scrape_realtor('Mississauga_2','43.61461','-79.57140','43.55431','-79.74821')
-    scrape_realtor('Brampton_1','43.71318','-79.68863','43.65297','-79.86544')
-    scrape_realtor('Brampton_2', '43.77686', '-79.60907','43.71671','-79.78588')
-    scrape_realtor('Toronto_1','43.69914','-79.32921','43.63892','-79.50602')
-    scrape_realtor('Toronto_2','43.76536','-79.35623','43.70521','-79.53304')
-    scrape_realtor('Oshawa', '43.98303','-78.57739','43.86310','-78.93101')
-    scrape_realtor('Pickering','43.93781','-78.87574','43.81778','-79.22936')
-
-
-
-
+    scrape_realtor('HamiltonEast','12','43.182935,-79.698982','data')
+    scrape_realtor('HamiltonWest','13','43.269680,-79.911580','data')
+    scrape_realtor('HamiltonSouth','12','43.178655,-80.052600','data')
+    scrape_realtor('Brantford','11','43.178625,-80.583035','data')
+    scrape_realtor('Cambridge','11','43.421220,-80.520550','data')
+    scrape_realtor('Waterdown','12','43.360685,-79.990120','data')
+    scrape_realtor('Milton','12','43.481128,-79.990120','data')
+    scrape_realtor('Burlington','12','43.360900,-79.637533','data')
+    scrape_realtor('Oakville','12','43.481100,-79.636500','data')
+    scrape_realtor('MissisaugaEast', '13', '43.571212,-79.584143','data')
+    scrape_realtor('MissisaugaWest','13','43.571212,-79.760783','data')
+    scrape_realtor('Georgetown','12','43.602077,-79.990120','data')
+    scrape_realtor('MissisaugaNorth', '12','43.661467,-79.642334','data')
+    scrape_realtor('Brampton','12','43.781062,-79.666023','data')
+    scrape_realtor('Toronto', '13', '43.658907,-79.387145','data')
+    scrape_realtor('York', '13', '43.718613,-79.387145','data')
+    scrape_realtor('NorthYork', '13', '43.778507,-79.402251','data')
+    scrape_realtor('Vaughn', '12', '43.844237,-79.666023','data')
+    scrape_realtor('MarkhamWest', '13', '43.838341,-79.402251','data')
+    scrape_realtor('KingCity', '12', '43.962973,-79.666023','data')
+    scrape_realtor('RichmondHill', '13', '43.897745,-79.402251','data')
+    scrape_realtor('Aurora', '12', '43.962973,-79.303817','data')
+    scrape_realtor('Newmarket', '12', '44.065686,-79.460372','data')
+    scrape_realtor('Scarborough', '11', '43.704964,-78.985457','data')
+    scrape_realtor('MarkhamEast', '12', '43.879187,-79.150252','data')
+    scrape_realtor('Oshawa', '12', '43.906155,-78.798003','data')
 
 
 # For reference, this was the manual way before get_fromdict, but sometimes some fields will be missing
