@@ -9,7 +9,7 @@ import os
 #https://github.com/bmitch/realtorscraper
 
 def get_from_dict(dataDict, mapList):
-    # Function to get value in nested directories using lists:
+    # Function to get value in nested dictionaries using lists:
     # See https://stackoverflow.com/questions/14692690/access-nested-dictionary-items-via-a-list-of-keys
     for k in mapList: dataDict = dataDict[k]
     return dataDict
